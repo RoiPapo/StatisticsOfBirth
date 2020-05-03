@@ -109,15 +109,12 @@ public class BirthStatistics {
             for (CSVRecord rec : parser){
                 if (rec.get(1).equals(gender)){
                     if (rec.get(0).equals(name)){
-
-                        current_highest_name_count = Integer.parseInt(rec.get(2));
+                        if (Integer.parseInt(rec.get(2)) > current_highest_name_count){
+                            current_highest_name_count = Integer.parseInt(rec.get(2));
+                            most_popular_year = year;
+                        }
                     }
                 }
-            }
-            int curr = getRank(year, name, gender);
-            if (curr > current_highest_name_count){
-                current_highest_name_count = curr;
-                most_popular_year = year;
             }
         }
         return most_popular_year;
