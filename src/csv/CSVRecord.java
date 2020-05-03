@@ -33,9 +33,9 @@ public final class CSVRecord implements Serializable, Iterable<String> {
     private final String[] values;
 
     /** The parser that originates this record. This is not serialized. */
-    private final transient CSVParser parser;
+    private final transient csv.CSVParser parser;
 
-    CSVRecord(final CSVParser parser, final String[] values, final String comment, final long recordNumber,
+    CSVRecord(final csv.CSVParser parser, final String[] values, final String comment, final long recordNumber,
               final long characterPosition) {
         this.recordNumber = recordNumber;
         this.values = values != null ? values : EMPTY_STRING_ARRAY;
@@ -146,7 +146,7 @@ public final class CSVRecord implements Serializable, Iterable<String> {
      * @return the parser.
      * @since 1.7
      */
-    public CSVParser getParser() {
+    public csv.CSVParser getParser() {
         return parser;
     }
 
