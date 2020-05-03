@@ -107,16 +107,14 @@ public class BirthStatistics {
             SEFileUtil seFileUtil = new SEFileUtil(getPathToCSV(year));
             csv.CSVParser parser = seFileUtil.getCSVParser();
             for (CSVRecord rec : parser){
-                if (rec.get(1).equals(gender)){
-                    if (rec.get(0).equals(name)){
-                        if (Integer.parseInt(rec.get(2)) > current_highest_name_count){
-                            current_highest_name_count = Integer.parseInt(rec.get(2));
-                            most_popular_year = year;
+                if (rec.get(1).equals(gender) && rec.get(0).equals(name)){
+                    if (Integer.parseInt(rec.get(2)) > current_highest_name_count){
+                        current_highest_name_count = Integer.parseInt(rec.get(2));
+                        most_popular_year = year;
                         }
                     }
                 }
             }
-        }
         return most_popular_year;
     }
 //
