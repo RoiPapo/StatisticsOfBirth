@@ -90,7 +90,7 @@ public class BirthStatistics {
 //    }
 
     /**
-     * @param args full path to folder of the data // noam
+     * @param args full path to folder of the data
      */
     public static void main(String[] args) {
 //        BirthStatistics birthStatistics = new BirthStatistics(args[0]);
