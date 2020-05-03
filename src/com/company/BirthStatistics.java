@@ -53,7 +53,7 @@ public class BirthStatistics {
 
     public static void main(String[] args) {
 //        BirthStatistics birthStatistics = new BirthStatistics(args[0]);
-        System.out.println("hi world");
+        System.out.println("hello world");
 //        birthStatistics.totalBirths(2010);
 //        int rank = birthStatistics.getRank(2010, "Asher", "M");
 //        System.out.println("Rank is: " + rank);
