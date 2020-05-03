@@ -58,28 +58,70 @@ public class BirthStatistics {
         // loop over the data rows in the CSV file
         for (CSVRecord rec : parser) {
             total_sum += Integer.parseInt(rec.get(2));
-            if (rec.get(1).equals("M") ) {
+            if (rec.get(1).equals("M")) {
                 male_sum+= Integer.parseInt(rec.get(2));
             } else {
                 female_sum+= Integer.parseInt(rec.get(2));
             }
         }
-        System.out.println("total births = "+total_sum);
-        System.out.println("female girls = "+female_sum);
-        System.out.println("male boys = "+male_sum);
+        System.out.println("total births = "+ total_sum);
+        System.out.println("female girls = "+ female_sum);
+        System.out.println("male boys = "+ male_sum);
     }
-//
-//    public int getRank(int year, String name, String gender) {
-//
-//    }
-//
+
+    public int getRank(int year, String name, String gender) {
+        int line_number = 0;
+        int first_male_line = 0;
+        int rank = -1;
+        SEFileUtil seFileUtil = new SEFileUtil(getPathToCSV(year));
+        csv.CSVParser parser = seFileUtil.getCSVParser();
+        first_male_line = getCsvRowOfMostPopularNameByGender(year, gender);
+
+        for (CSVRecord rec : parser){
+            line_number++;
+            if (gender.equals("M")){
+                if (rec.get(1).equals(gender)){
+                    if (rec.get(0).equals(name)){
+                        rank = line_number - first_male_line + 1;
+                    }
+                }
+            } else {
+                if (rec.get(1).equals(gender)){
+                    if (rec.get(0).equals(name)){
+                        rank = line_number;
+                    }
+                }
+            }
+        }
+        return rank;
+    }
+
 //    public String getName(int year, int rank, String gender) {
 //
 //    }
 //
-//    public int yearOfHighestRank(int start_year, int end_year, String name, String gender) {
-//
-//    }
+    public int yearOfHighestRank(int start_year, int end_year, String name, String gender) {
+        int most_popular_year = -1;
+        int current_highest_name_count = -1;
+        for (int year = start_year; year <= end_year; year++){
+            SEFileUtil seFileUtil = new SEFileUtil(getPathToCSV(year));
+            csv.CSVParser parser = seFileUtil.getCSVParser();
+            for (CSVRecord rec : parser){
+                if (rec.get(1).equals(gender)){
+                    if (rec.get(0).equals(name)){
+
+                        current_highest_name_count = Integer.parseInt(rec.get(2));
+                    }
+                }
+            }
+            int curr = getRank(year, name, gender);
+            if (curr > current_highest_name_count){
+                current_highest_name_count = curr;
+                most_popular_year = year;
+            }
+        }
+        return most_popular_year;
+    }
 //
 //    public int getAverageRank(int start_year, int end_year, String name, String gender) {
 //
@@ -96,12 +138,12 @@ public class BirthStatistics {
 //        BirthStatistics birthStatistics = new BirthStatistics(args[0]);
         BirthStatistics birthStatistics = new BirthStatistics("src/com/company/data");
         birthStatistics.totalBirths(2010);
-//        int rank = birthStatistics.getRank(2010, "Asher", "M");
-//        System.out.println("Rank is: " + rank);
+        int rank = birthStatistics.getRank(2010, "Asher", "M");
+        System.out.println("Rank is: " + rank);
 //        String name = birthStatistics.getName(2012, 10, "M");
 //        System.out.println("Name: " + name);
-//        System.out.println(birthStatistics.yearOfHighestRank(1880, 2010, "David", "M"));
-//        System.out.println(birthStatistics.yearOfHighestRank(1880, 2014, "Jennifer", "F"));
+        System.out.println(birthStatistics.yearOfHighestRank(1880, 2010, "David", "M"));
+        System.out.println(birthStatistics.yearOfHighestRank(1880, 2014, "Jennifer", "F"));
 //        System.out.println(birthStatistics.getAverageRank(1880, 2014, "Benjamin", "M"));
 //        System.out.println(birthStatistics.getAverageRank(1880, 2014, "Lois", "F"));
 //        System.out.println(birthStatistics.getTotalBirthsRankedHigher(2014, "Draco", "M"));
