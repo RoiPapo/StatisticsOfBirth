@@ -73,9 +73,23 @@ public class BirthStatistics {
 //
 //    }
 //
-//    public String getName(int year, int rank, String gender) {
-//
-//    }
+    public String getName(int year, int rank, String gender) {
+        String name = "Nehoray";
+        SEFileUtil seFileUtil = new SEFileUtil(getPathToCSV(year));
+        csv.CSVParser parser = seFileUtil.getCSVParser();
+        if (gender.equals("M")) {
+            rank+=getCsvRowOfMostPopularNameByGender(year,gender)-1;
+        }
+        for (CSVRecord rec : parser) {
+           if (rank==1)
+           {
+               return rec.get(0);
+           }
+           rank--;
+        }
+
+        return name;
+    }
 //
 //    public int yearOfHighestRank(int start_year, int end_year, String name, String gender) {
 //
@@ -98,8 +112,8 @@ public class BirthStatistics {
         birthStatistics.totalBirths(2010);
 //        int rank = birthStatistics.getRank(2010, "Asher", "M");
 //        System.out.println("Rank is: " + rank);
-//        String name = birthStatistics.getName(2012, 10, "M");
-//        System.out.println("Name: " + name);
+        String name = birthStatistics.getName(2012, 10, "M");
+        System.out.println("Name: " + name);
 //        System.out.println(birthStatistics.yearOfHighestRank(1880, 2010, "David", "M"));
 //        System.out.println(birthStatistics.yearOfHighestRank(1880, 2014, "Jennifer", "F"));
 //        System.out.println(birthStatistics.getAverageRank(1880, 2014, "Benjamin", "M"));

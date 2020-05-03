@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+
 import static csv.Token.Type.TOKEN;
 
 /**
@@ -22,9 +23,7 @@ import static csv.Token.Type.TOKEN;
  * There are several static factory methods that can be used to create instances for various types of resources:
  * </p>
  * <ul>
- *     <li>{@link #parse(java.io.File, Charset, CSVFormat)}</li>
- *     <li>{@link #parse(String, CSVFormat)}</li>
- *     <li>{@link #parse(java.net.URL, java.nio.charset.Charset, CSVFormat)}</li>
+ *
  * </ul>
  * <p>
  * Alternatively parsers can also be created by passing a {@link Reader} directly to the sole constructor.
@@ -167,9 +166,9 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      *             If an I/O error occurs
      */
     @SuppressWarnings("resource")
-    public static CSVParser parse(final File file, final Charset charset, final CSVFormat format) throws IOException {
-        Assertions.notNull(file, "file");
-        Assertions.notNull(format, "format");
+    public static CSVParser parse(final File file, final Charset charset, final csv.CSVFormat format) throws IOException {
+        csv.Assertions.notNull(file, "file");
+        csv.Assertions.notNull(format, "format");
         return new CSVParser(new InputStreamReader(new FileInputStream(file), charset), format);
     }
 
@@ -195,10 +194,10 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      * @since 1.5
      */
     @SuppressWarnings("resource")
-    public static CSVParser parse(final InputStream inputStream, final Charset charset, final CSVFormat format)
+    public static CSVParser parse(final InputStream inputStream, final Charset charset, final csv.CSVFormat format)
             throws IOException {
-        Assertions.notNull(inputStream, "inputStream");
-        Assertions.notNull(format, "format");
+        csv.Assertions.notNull(inputStream, "inputStream");
+        csv.Assertions.notNull(format, "format");
         return parse(new InputStreamReader(inputStream, charset), format);
     }
 
@@ -218,9 +217,9 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      *             If an I/O error occurs
      * @since 1.5
      */
-    public static CSVParser parse(final Path path, final Charset charset, final CSVFormat format) throws IOException {
-        Assertions.notNull(path, "path");
-        Assertions.notNull(format, "format");
+    public static CSVParser parse(final Path path, final Charset charset, final csv.CSVFormat format) throws IOException {
+        csv.Assertions.notNull(path, "path");
+        csv.Assertions.notNull(format, "format");
         return parse(Files.newInputStream(path), charset, format);
     }
 
@@ -243,7 +242,7 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      *             If there is a problem reading the header or skipping the first record
      * @since 1.5
      */
-    public static CSVParser parse(final Reader reader, final CSVFormat format) throws IOException {
+    public static CSVParser parse(final Reader reader, final csv.CSVFormat format) throws IOException {
         return new CSVParser(reader, format);
     }
 
@@ -260,9 +259,9 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      * @throws IOException
      *             If an I/O error occurs
      */
-    public static CSVParser parse(final String string, final CSVFormat format) throws IOException {
-        Assertions.notNull(string, "string");
-        Assertions.notNull(format, "format");
+    public static CSVParser parse(final String string, final csv.CSVFormat format) throws IOException {
+        csv.Assertions.notNull(string, "string");
+        csv.Assertions.notNull(format, "format");
 
         return new CSVParser(new StringReader(string), format);
     }
@@ -289,15 +288,15 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      * @throws IOException
      *             If an I/O error occurs
      */
-    public static CSVParser parse(final URL url, final Charset charset, final CSVFormat format) throws IOException {
-        Assertions.notNull(url, "url");
-        Assertions.notNull(charset, "charset");
-        Assertions.notNull(format, "format");
+    public static CSVParser parse(final URL url, final Charset charset, final csv.CSVFormat format) throws IOException {
+        csv.Assertions.notNull(url, "url");
+        csv.Assertions.notNull(charset, "charset");
+        csv.Assertions.notNull(format, "format");
 
         return new CSVParser(new InputStreamReader(url.openStream(), charset), format);
     }
 
-    private final CSVFormat format;
+    private final csv.CSVFormat format;
 
     /** A mapping of column names to column indices */
     private final Map<String, Integer> headerMap;
@@ -305,7 +304,7 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
     /** The column order to avoid re-computing it. */
     private final List<String> headerNames;
 
-    private final Lexer lexer;
+    private final csv.Lexer lexer;
 
     private final CSVRecordIterator csvRecordIterator;
 
@@ -323,7 +322,7 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      */
     private final long characterOffset;
 
-    private final Token reusableToken = new Token();
+    private final csv.Token reusableToken = new csv.Token();
 
     /**
      * Customized CSV parser using the given {@link CSVFormat}
@@ -342,7 +341,7 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      * @throws IOException
      *             If there is a problem reading the header or skipping the first record
      */
-    public CSVParser(final Reader reader, final CSVFormat format) throws IOException {
+    public CSVParser(final Reader reader, final csv.CSVFormat format) throws IOException {
         this(reader, format, 0, 1);
     }
 
@@ -369,13 +368,13 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
      * @since 1.1
      */
     @SuppressWarnings("resource")
-    public CSVParser(final Reader reader, final CSVFormat format, final long characterOffset, final long recordNumber)
+    public CSVParser(final Reader reader, final csv.CSVFormat format, final long characterOffset, final long recordNumber)
             throws IOException {
-        Assertions.notNull(reader, "reader");
-        Assertions.notNull(format, "format");
+        csv.Assertions.notNull(reader, "reader");
+        csv.Assertions.notNull(format, "format");
 
         this.format = format;
-        this.lexer = new Lexer(format, new ExtendedBufferedReader(reader));
+        this.lexer = new csv.Lexer(format, new csv.ExtendedBufferedReader(reader));
         this.csvRecordIterator = new CSVRecordIterator();
         final Headers headers = createHeaders();
         this.headerMap = headers.headerMap;
@@ -664,7 +663,7 @@ public final class CSVParser implements Iterable<CSVRecord>, Closeable {
                     if (sb == null) { // first comment for this record
                         sb = new StringBuilder();
                     } else {
-                        sb.append(Constants.LF);
+                        sb.append(csv.Constants.LF);
                     }
                     sb.append(this.reusableToken.content);
                     this.reusableToken.type = TOKEN; // Read another token
