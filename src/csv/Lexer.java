@@ -31,14 +31,14 @@ final class Lexer implements Closeable {
     private final boolean ignoreEmptyLines;
 
     /** The input stream */
-    private final ExtendedBufferedReader reader;
+    private final csv.ExtendedBufferedReader reader;
     private String firstEol;
 
     String getFirstEol(){
         return firstEol;
     }
 
-    Lexer(final CSVFormat format, final ExtendedBufferedReader reader) {
+    Lexer(final csv.CSVFormat format, final csv.ExtendedBufferedReader reader) {
         this.reader = reader;
         this.delimiter = format.getDelimiter();
         this.escape = mapNullToDisabled(format.getEscapeCharacter());
@@ -60,7 +60,7 @@ final class Lexer implements Closeable {
      * @throws java.io.IOException
      *             on stream access error
      */
-    Token nextToken(final Token token) throws IOException {
+    csv.Token nextToken(final csv.Token token) throws IOException {
 
         // get the last read char (required for empty line detection)
         int lastChar = reader.getLastChar();
@@ -163,7 +163,7 @@ final class Lexer implements Closeable {
      * @throws IOException
      *             on stream access error
      */
-    private Token parseSimpleToken(final Token token, int ch) throws IOException {
+    private csv.Token parseSimpleToken(final csv.Token token, int ch) throws IOException {
         // Faster to use while(true)+break than while(token.type == INVALID)
         while (true) {
             if (readEndOfLine(ch)) {
@@ -217,7 +217,7 @@ final class Lexer implements Closeable {
      * @throws IOException
      *             on invalid state: EOF before closing encapsulator or invalid character before delimiter or EOL
      */
-    private Token parseEncapsulatedToken(final Token token) throws IOException {
+    private csv.Token parseEncapsulatedToken(final csv.Token token) throws IOException {
         // save current line number in case needed for IOE
         final long startLineNumber = getCurrentLineNumber();
         int c;
@@ -356,7 +356,7 @@ final class Lexer implements Closeable {
             ch = reader.read();
             // Save the EOL state
             if (firstEol == null) {
-                this.firstEol = Constants.CRLF;
+                this.firstEol = csv.Constants.CRLF;
             }
         }
         // save EOL state here.
