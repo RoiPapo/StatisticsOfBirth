@@ -100,25 +100,6 @@ public class BirthStatistics {
 //
 //    }
 //
-    public int yearOfHighestRank(int start_year, int end_year, String name, String gender) {
-        int most_popular_year = -1;
-        int current_highest_name_count = -1;
-        int current_popular_rank = 0;
-        for (int year = start_year; year <= end_year; year++){
-            SEFileUtil seFileUtil = new SEFileUtil(getPathToCSV(year));
-            csv.CSVParser parser = seFileUtil.getCSVParser();
-            for (CSVRecord rec : parser){
-                if (rec.get(1).equals(gender) && rec.get(0).equals(name)){
-                    if (Integer.parseInt(rec.get(2)) > current_highest_name_count){
-                        current_highest_name_count = Integer.parseInt(rec.get(2));
-                        most_popular_year = year;
-                        current_popular_rank = getRank(year, name, gender);
-                        }
-                    }
-                }
-            }
-        return current_popular_rank;
-    }
 //
 //    public int getAverageRank(int start_year, int end_year, String name, String gender) {
 //
@@ -131,7 +112,7 @@ public class BirthStatistics {
     /**
      * @param args full path to folder of the data
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
 //        BirthStatistics birthStatistics = new BirthStatistics(args[0]);
         BirthStatistics birthStatistics = new BirthStatistics("src/com/company/data");
         birthStatistics.totalBirths(2010);
@@ -148,5 +129,16 @@ public class BirthStatistics {
 //        System.out.println();
     }
 
+    public int yearOfHighestRank(int start_year, int end_year, String name, String gender) {
+        int most_popular_year = -1;
+        int current_popular_rank = Integer.MAX_VALUE;
+        for (int year = start_year; year <= end_year; year++) {
+            int curr = getRank(year, name, gender);
+            if (current_popular_rank > curr || current_popular_rank == -1) {
+                current_popular_rank = curr;
+                most_popular_year = year;
+            }
+        }
+        return most_popular_year;
 
 }
