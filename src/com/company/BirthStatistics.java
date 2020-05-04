@@ -1,5 +1,6 @@
 package com.company;
 
+import csv.CSVParser;
 import csv.CSVRecord;
 import csv.SEFileUtil;
 
@@ -10,13 +11,12 @@ public class BirthStatistics {
 
     public final String pathToDirCSVs;
 
-    public BirthStatistics(String pathCSVs) {
+    public BirthStatistics (String pathCSVs){
         pathToDirCSVs = pathCSVs;
     }
 
     /**
      * This method returns the path to the CSV file of the specified year
-     *
      * @param year
      * @return
      */
@@ -166,8 +166,8 @@ public class BirthStatistics {
      * @param args full path to folder of the data
      */
     public static void main(String[] args) {
-        BirthStatistics birthStatistics = new BirthStatistics(args[0]);
-   //     BirthStatistics birthStatistics = new BirthStatistics("src/com/company/data");
+//        BirthStatistics birthStatistics = new BirthStatistics(args[0]);
+        BirthStatistics birthStatistics = new BirthStatistics("src/com/company/data");
         birthStatistics.totalBirths(2010);
         int rank = birthStatistics.getRank(2010, "Asher", "M");
         System.out.println("Rank is: " + rank);
